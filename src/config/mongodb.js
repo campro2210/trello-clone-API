@@ -1,32 +1,27 @@
 import { MongoClient } from 'mongodb'
-import { env } from '*/config/environment.js'
+import { env } from '*/config/environment'
 
 
 const url = env.MONGODB_URL
 
+let dbInstance = null
 
 export const connectDB = async () => {
   const client = new MongoClient(url, {
     useUnifiedTopology: true,
     useNewUrlParser: true
   })
-  try {
-    // connect client to server Database
-    await client.connect()
+  // connect client to server Database
+  await client.connect()
 
-    // show list database
-    await listDatabase(client)
-    console.log(' connected successfully!')
-  } finally {
-    // Ensure client will disconnect server after finish
-    await client.close()
-  }
+  // asign client to dbInstance
+  dbInstance = client.db(env.DATABASE_NAME)
+
 }
-const listDatabase = async (client) => {
-  let listdatabase = await client.db().admin().listDatabases()
-  console.log(listdatabase)
-  console.log('database:')
-  listdatabase.databases.forEach(db => console.log(`- ${db.name}`))
+
+export const getDB = () => {
+  if (!dbInstance) throw console.error('must connect database first!')
+  return dbInstance
 }
 
 

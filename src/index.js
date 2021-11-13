@@ -4,16 +4,27 @@ import { connectDB } from '*/config/mongodb.js'
 
 import { env } from '*/config/environment.js'
 
-const app = express()
+
+connectDB()
+  .then(() => console.log('connected successfully to database'))
+  .then(() => bootServer())
+  .catch(error => {
+    console.error(error)
+    process.exit(1)
+  })
 
 
-connectDB().catch(console.log)
+const bootServer =() => {
+  const app = express()
+
+  app.get('/test', async (req, res) => {
 
 
-app.get('/', (req, res) => {
-  res.end(' <h1> hello word</h1> <br></br>')
+    res.end(' <h1> hello word</h1> <br></br>')
 
-})
-app.listen(env.PORT, env.HOST_NAME, () => {
-  console.log (`running at ${env.HOST_NAME} : ${env.PORT} `)
-})
+  })
+  app.listen(env.APP_PORT, env.APP_HOST, () => {
+    console.log (`running at ${env.APP_HOST} : ${env.APP_PORT} `)
+  })
+
+}
