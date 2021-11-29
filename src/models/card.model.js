@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import { getDB } from '*/config/mongodb'
+import { ObjectId } from 'mongodb'
 
 // Define board collection
 
@@ -21,12 +22,27 @@ const validateSchema = async (data ) => {
 
 const createNew = async (data) => {
   try {
-    const value = await validateSchema(data)
-    const result = await getDB().collection(cardCollectionName).insertOne(value)
+    const validatedValue = await validateSchema(data)
+    const insertValue = {
+      ...validatedValue,
+      boardId : ObjectId ( validatedValue.boardId),
+      columnId : ObjectId ( validatedValue.columnId)
+    }
+    const result = await getDB().collection(cardCollectionName).insertOne(insertValue)
     return result
   } catch (error) {
     throw new Error(error)
   }
 }
+const findOneById = async (id) => {
+  try {
+    const result = await getDB().collection(cardCollectionName).findOne({ _id: ObjectId(id) })
+    return result
+  } catch (error) {
+    throw new Error(error)
+  }
 
-export const CardModel = { createNew }
+}
+
+
+export const CardModel = { cardCollectionName, createNew, findOneById }
