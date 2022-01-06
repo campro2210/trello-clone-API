@@ -6,3 +6,7 @@ export const httpStatusCode = {
   INTERNAL_SERVER: 500
 
 }
+export const WHITELIST_DOMAIN = [
+  'http://localhost:1931',
+  'http://localhost:3000'
+]
