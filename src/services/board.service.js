@@ -1,5 +1,5 @@
 import { BoardModel } from '*/models/board.model'
-
+import { cloneDeep } from 'lodash'
 const createNew = async (data) => {
   try {
     const result = await BoardModel.createNew(data)
@@ -12,16 +12,19 @@ const createNew = async (data) => {
 const getFullBoard = async (boardId) => {
   try {
     const board = await BoardModel.getFullBoard(boardId)
+    //sort column destroy 
+    const columnsLive = cloneDeep(board)
+    columnsLive.columns = columnsLive.columns.filter(column => !column._destroy)
     // add card to each column
-    board.columns.forEach(column => {
-      column.cards= board.cards.filter(c => c.columnId.toString() === column._id.toString())
+    columnsLive.columns.forEach(column => {
+      column.cards= columnsLive.cards.filter(c => c.columnId.toString() === column._id.toString())
     })
     // sort column and card by columnOrder and cardOrder will be pass in frontend
 
     // remove card from board
-    delete board.cards
-    console.log(board)
-    return board
+    delete columnsLive.cards
+    console.log(columnsLive)
+    return columnsLive
   } catch (error) {
     throw new Error(error)
 
