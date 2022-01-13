@@ -30,8 +30,8 @@ const bootServer =() => {
   app.use('/v1', apiV1)
 
 
-  app.listen(env.APP_PORT, env.APP_HOST, () => {
-    console.log (`running at ${env.APP_HOST} : ${env.APP_PORT} `)
+  app.listen(env.APP_PORT || process.env.PORT, () => {
+    console.log (`running at  : ${process.env.PORT} `)
   })
 
 }
