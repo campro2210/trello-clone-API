@@ -8,5 +8,5 @@ export const httpStatusCode = {
 }
 export const WHITELIST_DOMAIN = [
   'http://localhost:1931',
-  'http://localhost:3000'
+  'https://trello-clone-web-285c8.web.app'
 ]

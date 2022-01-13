@@ -12,7 +12,7 @@ const createNew = async (data) => {
 const getFullBoard = async (boardId) => {
   try {
     const board = await BoardModel.getFullBoard(boardId)
-    //sort column destroy 
+    //sort column destroy
     const columnsLive = cloneDeep(board)
     columnsLive.columns = columnsLive.columns.filter(column => !column._destroy)
     // add card to each column
@@ -31,4 +31,22 @@ const getFullBoard = async (boardId) => {
   }
 }
 
-export const BoardService = { createNew, getFullBoard }
+const update = async (id, data) => {
+  try {
+    const updateData ={ ...data,
+      updateAt : Date.now()
+    }
+    if (updateData._id) delete updateData._id
+    if (updateData.columns) delete updateData.columns
+
+    const updatedBoard = await BoardModel.update(id, updateData)
+
+
+    return updatedBoard
+  } catch (error) {
+    throw new Error(error)
+
+  }
+}
+
+export const BoardService = { createNew, getFullBoard, update }
